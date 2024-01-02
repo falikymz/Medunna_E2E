@@ -13,8 +13,10 @@ import static io.restassured.RestAssured.given;
 import static junit.framework.TestCase.assertEquals;
 import static step_definitions.ui_stepdefs.MedunnaRoomStepDefs.roomNumber;
 
-public class ApiStepdefs {
+public class ApiRoomStepdefs {
     int roomId;
+    public static RoomPojo expectedData;
+    Response response;
     @Given("Oda ID bilgisi alinir")
     public void odaIDBilgisiAlinir() {
     spec.pathParams("first","api","second","rooms")
@@ -27,13 +29,12 @@ public class ApiStepdefs {
 
     }
 
-    RoomPojo ecpectedData;
-    Response response;
+
     @When("Get request gonderilir")
     public void getRequestGonderilir() {
     spec.pathParams("first","api","second","rooms","third",roomId);
 
-    ecpectedData = new RoomPojo(roomNumber,"SUITE",true,123.00,"End To End Test icin olusturulmustur");
+    expectedData = new RoomPojo(roomNumber,"SUITE",true,123.00,"End To End Test icin olusturulmustur");
 
     response = given(spec).when().get("{first}/{second}/{third}");
 
@@ -44,9 +45,9 @@ public class ApiStepdefs {
     RoomPojo actualData = response.as(RoomPojo.class);
 
     assertEquals(200,response.statusCode());
-    assertEquals(ecpectedData.getRoomNumber(),actualData.getRoomNumber());
-    assertEquals(ecpectedData.isStatus(),actualData.isStatus());
-    assertEquals(ecpectedData.getPrice(),actualData.getPrice());
-    assertEquals(ecpectedData.getDescription(),actualData.getDescription());
+    assertEquals(expectedData.getRoomNumber(),actualData.getRoomNumber());
+    assertEquals(expectedData.isStatus(),actualData.isStatus());
+    assertEquals(expectedData.getPrice(),actualData.getPrice());
+    assertEquals(expectedData.getDescription(),actualData.getDescription());
     }
 }
